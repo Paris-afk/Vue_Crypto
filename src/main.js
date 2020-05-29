@@ -1,8 +1,19 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
+import "bootstrap";
+import "./assets/app.scss";
+import router from "@/router";
+import { dollarFilter } from "@/filter";
+import { percentFilter } from "./filter";
+import { VueSpinners } from "@saeris/vue-spinners";
 
-Vue.config.productionTip = false
+//aqui ponemos el nombre del filtro y la funcion que ejecutará
+Vue.use(VueSpinners);
+Vue.filter("dollar", dollarFilter);
+Vue.filter("percent", percentFilter);
+Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router: router,
+  render: (h) => h(App),
+}).$mount("#app");
