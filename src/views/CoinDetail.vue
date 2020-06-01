@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="contenido">
+    <div class="espace"></div>
     <div class="row">
       <pacman-loader :loading="isLoading" :color="'yellow'" :size="150" />
       <div class="col-4" v-if="!isLoading">
@@ -30,7 +31,24 @@
         </ul>
       </div>
       <div class="col-4">
-        <button class="btn btn-light">Cambiar</button>
+        <button @click="toggleConverter" class="btn btn-info ">
+          {{ fromUsd ? `USD a ${asset.symbol}` : `${asset.symbol} a USD` }}
+        </button>
+
+        <div class="flex flex-row my-5">
+          <label class="w-full" for="convertValue">
+            <input
+              v-model="convertValue"
+              id="convertValue"
+              type="number"
+              class="text-center bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
+              :placeholder="`Valor en ${fromUsd ? 'USD' : asset.symbol}`"
+            />
+          </label>
+          <span class="text-xl"
+            >{{ convertResult }} {{ fromUsd ? asset.symbol : "USD" }}</span
+          >
+        </div>
       </div>
     </div>
     <div class="col-12">
@@ -57,7 +75,20 @@ export default {
       isLoading: false,
       asset: {},
       markets: [],
+      fromUsd: true,
+      convertValue: null,
     };
+  },
+  computed: {
+    convertResult() {
+      if (!this.convertValue) {
+        return 0;
+      }
+      const result = this.fromUsd
+        ? this.convertValue / this.asset.priceUsd
+        : this.convertValue * this.asset.priceUsd;
+      return result.toFixed(4);
+    },
   },
 
   created() {
@@ -68,6 +99,9 @@ export default {
   },
 
   methods: {
+    toggleConverter() {
+      this.fromUsd = !this.fromUsd;
+    },
     getCoin() {
       this.isLoading = true;
       //aqui saco el id de la url
@@ -101,5 +135,9 @@ export default {
   margin-left: 3%;
   color: black;
   font-weight: bold;
+}
+
+.contenido {
+  margin-top: 40px;
 }
 </style>

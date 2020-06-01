@@ -3,15 +3,32 @@
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col">Ranking</th>
+        <th
+          :class="{ up: this.sortOrder === 1, down: this.sortOrder === -1 }"
+          scope="col"
+          @click="changeSortOrder()"
+        >
+          Ranking
+        </th>
         <th scope="col">Nom</th>
         <th scope="col">Prix</th>
         <th scope="col">Cap de Marché</th>
         <th scope="col">Variation 24h</th>
+        <th scope="col">
+          <form class="form-inline">
+            <input
+              v-model="filter"
+              class="form-control mr-sm-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+          </form>
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="a in assets" :key="a.id">
+      <tr v-for="a in filterdAssets" :key="a.id">
         <td>
           <img
             :src="
@@ -37,7 +54,7 @@
         </td>
         <td>
           <router-link :to="{ name: 'coin-detail', params: { id: a.id } }">
-            <button class="btn btn-info">Aller</button>
+            <button class="btn btn-info ">Aller</button>
           </router-link>
         </td>
       </tr>
@@ -52,6 +69,35 @@ export default {
     assets: {
       type: Array,
       default: () => [],
+    },
+  },
+
+  computed: {
+    filterdAssets() {
+      const altOrder = this.sortOrder === 1 ? -1 : 1;
+      return this.assets
+        .filter(
+          (a) =>
+            a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
+            a.name.toLowerCase().includes(this.filter.toLowerCase())
+        )
+        .sort((a, b) => {
+          if (parseInt(a.rank) > parseInt(b.rank)) {
+            return this.sortOrder;
+          }
+          return altOrder;
+        });
+    },
+  },
+  data() {
+    return {
+      filter: "",
+      sortOrder: 1,
+    };
+  },
+  methods: {
+    changeSortOrder() {
+      this.sortOrder = this.sortOrder === 1 ? -1 : 1;
     },
   },
 };
@@ -81,5 +127,15 @@ span {
   color: gray;
   font-weight: bold;
   text-decoration: none !important;
+}
+
+.up::before {
+  content: "👆";
+  cursor: pointer;
+}
+
+.down::before {
+  content: "👇";
+  cursor: pointer;
 }
 </style>
