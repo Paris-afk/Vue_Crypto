@@ -21,17 +21,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "16"
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+          npm install --no-package-lock
 
       - name: Build
         env:
           NODE_ENV: production
           VUE_APP_COINCAP_API_KEY: ${{ secrets.VUE_APP_COINCAP_API_KEY }}
           CI: false
+          NODE_OPTIONS: --openssl-legacy-provider
         run: npm run build
 
       - name: Upload Pages artifact
