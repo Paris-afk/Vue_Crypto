@@ -1,8 +1,13 @@
-const url = "https://api.coincap.io/v2";
+const url = "https://rest.coincap.io/v3";
+const apiKey = process.env.VUE_APP_COINCAP_API_KEY;
 
 function getAssets() {
   return (
-    fetch(`${url}/assets?limit=20`)
+    fetch(`${url}/assets?limit=20`, {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`
+      }
+    })
       .then((res) => res.json())
       //este data es el objeto del array asi viene en la doc de coincap
       .then((res) => res.data)
@@ -11,7 +16,11 @@ function getAssets() {
 
 function getAsset(coin) {
   return (
-    fetch(`${url}/assets/${coin}`)
+    fetch(`${url}/assets/${coin}`, {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`
+      }
+    })
       .then((res) => res.json())
       //este data es el objeto del array asi viene en la doc de coincap
       .then((res) => res.data)
@@ -19,13 +28,21 @@ function getAsset(coin) {
 }
 
 function getMarkets(coin) {
-  return fetch(`${url}/assets/${coin}/markets?limit=5`)
+  return fetch(`${url}/assets/${coin}/markets?limit=5`, {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`
+    }
+  })
     .then((res) => res.json())
     .then((res) => res.data);
 }
 
 function getExchange(id) {
-  return fetch(`${url}/exchange/${id}`)
+  return fetch(`${url}/exchanges/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`
+    }
+  })
     .then((res) => res.json())
     .then((res) => res.data);
 }

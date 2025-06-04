@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import "bootstrap";
-import "./assets/app.scss";
+import "./assets/app.css";
 import router from "@/router";
 import { dollarFilter } from "@/filter";
 import { percentFilter } from "./filter";
