@@ -35,8 +35,7 @@ jobs:
           NODE_ENV: production
           VUE_APP_COINCAP_API_KEY: ${{ secrets.VUE_APP_COINCAP_API_KEY }}
           CI: false
-          NODE_OPTIONS: --openssl-legacy-provider
-        run: npm run build
+        run: npm run build:legacy
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
